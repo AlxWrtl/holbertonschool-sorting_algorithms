@@ -11,36 +11,30 @@
  */
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *current, *swap;
+	listint_t *current, *temp;
 
 	/* Check if list is NULL or if it only has one element */
 	if (!list || !*list)
 		return;
 
 	/* Iterate through each element in the list starting from the second node */
-	for (current = (*list)->next; current != NULL; current = current->next)
+	for (current = (*list)->next; current != NULL; current = temp)
 	{
-		/* Iterate through the sorted part of the list */
+		temp = current->next;
 		while (current->prev && current->n < current->prev->n)
 		{
-			swap = current->prev;
-
-			/* Detaching the current node from its position */
-			current->prev = swap->prev;
-			swap->next = current->next;
-
-			/* Adjusting links of the surrounding nodes */
-			if (swap->prev)
-				swap->prev->next = current;
+			/* Swap nodes */
+			current->prev->next = current->next;
 			if (current->next)
-				current->next->prev = swap;
+				current->next->prev = current->prev;
 
-			/* Finalizing the swap of the nodes */
-			current->next = swap;
-			swap->prev = current;
+			current->next = current->prev;
+			current->prev = current->prev->prev;
+			current->next->prev = current;
 
-			/* Update the head of the list if current is the new first node */
-			if (!current->prev)
+			if (current->prev)
+				current->prev->next = current;
+			else
 				*list = current;
 
 			/* Print the list after each swap for visual tracking */
