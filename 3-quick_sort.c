@@ -62,11 +62,14 @@ int partition(int *array, int start, int end, size_t size)
  *              using the Quick Sort algorithm. It divides the array
  *              into partitions, then sorts each partition recursively.
  */
-void recursive_quick_sort(int *array, int start_index, int end_index, size_t size)
+void recursive_quick_sort(int *array, int start_index,
+int end_index, size_t size)
 {
+	int pivot_index;
+
 	if (start_index < end_index)
 	{
-		int pivot_index = partition(array, start_index, end_index, size);
+		pivot_index = partition(array, start_index, end_index, size);
 		recursive_quick_sort(array, start_index, pivot_index - 1, size);
 		recursive_quick_sort(array, pivot_index + 1, end_index, size);
 	}
