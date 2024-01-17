@@ -2,61 +2,53 @@
 
 /**
  * swap_elements - Swaps two elements in an array.
- * @element1: Pointer to the first element.
- * @element2: Pointer to the second element.
+ * @array: Pointer to the array where the swap will occur.
+ * @i: Index of the first element.
+ * @j: Index of the second element.
+ * @size: Size of the array.
  *
  * Description: This function swaps the values of the two elements
- *              pointed by element1 and element2. A temporary variable
- *              is used to facilitate the swap.
+ *              at indices i and j in the array. A temporary variable
+ *              is used to facilitate the swap. If a swap occurs,
+ *              the array is printed.
  */
-void swap_elements(int *element1, int *element2)
+void swap_elements(int *array, int i, int j, size_t size)
 {
-	int temp = *element1;  /* Temporary storage for the first element */
-	*element1 = *element2; /* Assign second element's value to first */
-	*element2 = temp;	   /* Assign stored first element's value to second */
+	int temp;
+
+	if (array[i] != array[j])
+	{
+		temp = array[i];
+		array[i] = array[j];
+		array[j] = temp;
+		print_array(array, size);
+	}
 }
 
 /**
- * partition_array - Partitions an array using the Lomuto scheme.
- * @array: The array to be partitioned.
- * @start_index: The starting index of the partition.
- * @end_index: The ending index of the partition.
- * @size: The total size of the array.
- *
- * Description: This function implements the Lomuto partition scheme,
- *              which is used in the Quick Sort algorithm. It reorders
- *              the elements in the array such that elements less than
- *              the pivot are on the left, and others are on the right.
- *
- * Return: The partition index where the array is divided.
+ * partition - Partitions an integer array using the Lomuto partition scheme.
+ * @array: Pointer to the integer array to be partitioned.
+ * @start: Starting index of the range to be partitioned.
+ * @end: Ending index of the range to be partitioned.
+ * @size: Size of the array.
+ * Return: The final index of the pivot.
  */
-int partition_array(int *array, int start_index, int end_index, size_t size)
+int partition(int *array, int start, int end, size_t size)
 {
-	int pivot = array[end_index];	   /* Pivot element */
-	int partition_index = start_index; /* Partitioning index */
+	int pivot = array[end];
+	int i = start;
 
-	for (int j = start_index; j < end_index; j++)
+	for (int j = start; j < end; j++)
 	{
-		/* If current element is smaller than the pivot */
 		if (array[j] < pivot)
 		{
-			swap_elements(&array[partition_index], &array[j]);
-			/* Print array if elements are swapped */
-			if (partition_index != j)
-			{
-				print_array(array, size);
-			}
-			partition_index++; /* Move partition index */
+			swap_elements(array, i, j, size);
+			i++;
 		}
 	}
-	/* Swap pivot into its correct position */
-	swap_elements(&array[partition_index], &array[end_index]);
-	/* Print array if pivot is moved */
-	if (partition_index != end_index)
-	{
-		print_array(array, size);
-	}
-	return (partition_index); /* Return partition index */
+
+	swap_elements(array, i, end, size);
+	return (i);
 }
 
 /**
@@ -70,14 +62,11 @@ int partition_array(int *array, int start_index, int end_index, size_t size)
  *              using the Quick Sort algorithm. It divides the array
  *              into partitions, then sorts each partition recursively.
  */
-void recursive_quick_sort(
-	int *array, int start_index, int end_index, size_t size)
+void recursive_quick_sort(int *array, int start_index, int end_index, size_t size)
 {
-	/* Only sort if start index is less than end index */
 	if (start_index < end_index)
 	{
-		int pivot_index = partition_array(array, start_index, end_index, size);
-
+		int pivot_index = partition(array, start_index, end_index, size);
 		recursive_quick_sort(array, start_index, pivot_index - 1, size);
 		recursive_quick_sort(array, pivot_index + 1, end_index, size);
 	}
@@ -87,22 +76,11 @@ void recursive_quick_sort(
  * quick_sort - Sorts an array of integers in ascending order using Quick Sort.
  * @array: The array to be sorted.
  * @size: Size of the array.
- *
- * Description: This function is an entry point to the Quick Sort algorithm.
- *              It checks if the array is not NULL and if the size is suitable
- *              for sorting (i.e., more than one element). If these conditions
- *              are met, it calls the recursive_quick_sort function to perform
- *              the sorting process.
- *
- * Note: The function does not return any value. The sorting is performed
- *       in-place, modifying the original array.
  */
 void quick_sort(int *array, size_t size)
 {
-	/* Check for null array or insufficient size */
 	if (array == NULL || size < 2)
-		return; /* No action needed for empty or single-element array */
+		return;
 
-	/* Begin recursive Quick Sort on the entire array */
 	recursive_quick_sort(array, 0, size - 1, size);
 }
