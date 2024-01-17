@@ -36,9 +36,9 @@ void swap_elements(int *array, int i, int j, size_t size)
 int partition(int *array, int start, int end, size_t size)
 {
 	int pivot = array[end];
-	int i = start;
+	int i = start, j;
 
-	for (int j = start; j < end; j++)
+	for (j = start; j < end; j++)
 	{
 		if (array[j] < pivot)
 		{
